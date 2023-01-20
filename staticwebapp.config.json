@@ -1,0 +1,37 @@
+{
+    "trailingSlash": "auto",
+    "navigationFallback": {
+        "rewrite": "/index.html",
+        "exclude": ["/images/*.{png,jpg,gif}", "/static/*"]
+    },
+    "routes": [
+        {
+            "route": "/images/*.{png,jpg,gif}",
+            "headers": {
+              "Cache-Control": "public, max-age=604800, immutable"
+            }
+          }
+    ]
+    // "auth": {
+    //   "identityProviders": {
+    //     "customOpenIdConnectProviders": {
+    //       "aadb2c": {
+    //         "registration": {
+    //           "clientIdSettingName": "AADB2C_PROVIDER_CLIENT_ID",
+    //           "clientCredential": {
+    //             "clientSecretSettingName": "AADB2C_PROVIDER_CLIENT_SECRET"
+    //           },
+    //           "openIdConnectConfiguration": {
+    //             "wellKnownOpenIdConfiguration": "https://sampleapi.b2clogin.com/sublimationapi.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN/v2.0/.well-known/openid-configuration"
+    //           }
+    //         },
+    //         "login": {
+    //           "nameClaimType": "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name",
+    //           "scopes": [],
+    //           "loginParameterNames": []
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+}

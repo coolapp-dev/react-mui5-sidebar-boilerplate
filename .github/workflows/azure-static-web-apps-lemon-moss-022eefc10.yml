@@ -1,0 +1,124 @@
+name: Azure Static Web Apps CI/CD
+
+on:
+  push:
+    branches:
+      - feature/*
+      - hotfix/*
+      - development
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+
+jobs:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    name: Build and Deploy Job
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+      - name: install
+        run: yarn install
+
+
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "DEPLOY_DATE=`date +%m-%d-%Y#%H:%M`" >> $GITHUB_ENV
+
+      - name: Add CURRENT_TAG env property with commit short sha
+        run: echo "CURRENT_TAG=0.0.1" >> $GITHUB_ENV
+        
+      - name: update version 
+        run: echo "{\"sha\":\"$SHORT_SHA\",\"date\":\"$DEPLOY_DATE\",\"tag\":\"$CURRENT_TAG\"}" > public/version.json
+
+
+
+
+      - name: build react app
+        run: |
+          yarn build
+          cp staticwebapp.config.json ./build
+        env:
+          CI: false
+          REACT_APP_STAGE: prod
+
+      # - uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.9' 
+
+      
+      # - name: build python funcs
+      #   run: |
+      #     cd api
+      #     python3.9 -m venv .venv
+      #     source .venv/bin/activate
+      #     pip install -U pip setuptools
+      #     pip install -r requirements.txt
+      #     cd .venv/bin
+      #     rm python3.9
+      #     ln -s  /opt/python/3.9.7/bin/python3.9 $(pwd)/python3.9
+
+
+
+
+      - name: Deploy
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          action: "upload"
+          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
+          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
+          app_location: "build" # App source code path
+          #api_location: "api" # Api source code path - optional
+          #output_location: "build" # Built app content directory - optional
+          output_location: ''
+          skip_app_build: true
+          #skip_api_build: false
+          production_branch: "development"
+          ###### End of Repository/Build Configurations ######
+
+          
+
+  # close_pull_request_job:
+  #   if: github.event_name == 'pull_request' && github.event.action == 'closed'
+  #   runs-on: ubuntu-latest
+  #   name: Close Pull Request Job
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+  #         cache: 'yarn'
+  #     - name: install
+  #       run: yarn install
+
+  #     - name: build react app
+  #       run: |
+  #         yarn build
+  #         cp staticwebapp.config.json ./build
+  #       env:
+  #         CI: false
+  #         REACT_APP_STAGE: prod
+
+  #     - name: Close Pull Request
+  #       id: closepullrequest
+  #       uses: Azure/static-web-apps-deploy@v1
+  #       with:
+  #         azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+  #         action: "close"
+  #         # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
+  #         app_location: "build" # App source code path
+  #         #api_location: "api" # Api source code path - optional
+  #         #output_location: "build" # Built app content directory - optional
+  #         output_location: ''
+  #         skip_app_build: true
+  #         production_branch: "main"
