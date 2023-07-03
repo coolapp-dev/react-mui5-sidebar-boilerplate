@@ -1,0 +1,26 @@
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+
+
+.App-header {
+  background-color: #efefef;
+  /*min-height: 100vh;*/
+  /* flex-grow: 1; */
+  display: flex;
+  flex:1;
+  flex-direction: column;
+   /* align-items: flex-start;   */
+ 
+  /*justify-content: center; */
+  /* height: 100%; */
+  color:#00281e;
+  /* overflow-y: scroll; */
+}
+
+
