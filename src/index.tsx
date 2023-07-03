@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from "react-router-dom";
 import ThemeConfig from './theme';
 import GlobalStyles from './theme/globalStyles';
 import '@fontsource/roboto/300.css';
@@ -42,12 +41,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
         <ThemeConfig>
         {/* <GlobalStyles /> */}
             <App />
         </ThemeConfig>
-    </BrowserRouter>
   </React.StrictMode>
 );
 

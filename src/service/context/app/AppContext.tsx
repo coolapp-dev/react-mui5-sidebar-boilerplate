@@ -1,8 +1,6 @@
 import React, { useState, useEffect,createContext } from "react";
 
 
-import  {useActor} from '@xstate/react'
-import {service as mainService} from '../../main'
 
 
 
@@ -19,8 +17,6 @@ export const AppContext = createContext<{value:string,fn:()=>Promise<string>}>({
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
  
 
-   
-  const [state, send] = useActor(mainService)
   
   let value="",
       fn=retrieveAccessTokenFake

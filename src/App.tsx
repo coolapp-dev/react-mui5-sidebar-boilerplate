@@ -1,7 +1,6 @@
 import { Routes, Route,  Link } from "react-router-dom";
 import WidgetLayout from './components/layout/default/WidgetLayout'
-import {service as mainService} from './service/main'
-import  {useActor} from '@xstate/react'
+import {  createBrowserRouter, RouterProvider } from "react-router-dom";
 
 
 function Home() {
@@ -41,24 +40,25 @@ function NoMatch() {
 }
 
 
+
+const routes = createBrowserRouter([
+  {
+    path: "/",
+    element: <WidgetLayout />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "about", element: <About /> },
+      { path: "widgeta", element: <WidgetA /> },
+      { path: "*", element: <NoMatch /> },
+    ],
+  },
+]);
+
 function App( ) {
 
 
-  const [state, send] = useActor(mainService)
-
   return (
-
-
-
-    <Routes>
-      <Route path="/" element={<WidgetLayout />}>
-        <Route index element={<Home />} />
-        <Route path="widgeta" element={<WidgetA />} />
-        <Route path="about" element={<About />} />
-        <Route path="*" element={<NoMatch />} />
-      </Route>
-  </Routes>
-
+    <RouterProvider router={routes} />
   );
 }
 
